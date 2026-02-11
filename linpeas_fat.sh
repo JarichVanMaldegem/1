@@ -306,9 +306,7 @@ print_support () {
     \---------------------------------------------------------------------------------/
 """
 }
-###########################################
-#-----------) Starting Output (-----------#
-###########################################
+
 echo ""
 if [ ! "$QUIET" ]; then print_banner; print_support; fi
 printf ${BLUE}"          $SCRIPTNAME-$VERSION ${YELLOW}by carlospolop\n"$NC;
@@ -331,9 +329,7 @@ fi
 echo ""
 printf " ${DG}Starting $SCRIPTNAME. Caching Writable Folders...$NC"
 echo ""
-###########################################
-#-----------) Some Basic Info (-----------#
-###########################################
+ 
 print_title "Basic information"
 printf $LG"OS: "$NC
 (cat /proc/version || uname -a ) 2>/dev/null
@@ -426,7 +422,7 @@ while $SEDOVERFLOW; do
   if [ $? -eq 0 ]; then
       SEDOVERFLOW=false
   else
-      MAXPATH_FIND_W=$(($MAXPATH_FIND_W-1)) #If overflow of directories, check again with MAXPATH_FIND_W - 1
+      MAXPATH_FIND_W=$(($MAXPATH_FIND_W-1)) 
   fi
   if [ $MAXPATH_FIND_W -lt 1 ] ; then # prevent infinite loop
      SEDOVERFLOW=false
@@ -437,11 +433,11 @@ if [ "$SEARCH_IN_FOLDER" ]; then
   HOMESEARCH="${ROOT_FOLDER}home/ ${ROOT_FOLDER}Users/ ${ROOT_FOLDER}root/ ${ROOT_FOLDER}var/www/"
 else
   HOMESEARCH="/home/ /Users/ /root/ /var/www $(cat /etc/passwd 2>/dev/null | grep "sh$" | cut -d ":" -f 6 | grep -Ev "^/root|^/home|^/Users|^/var/www" | tr "\n" " ")"
-  if ! echo "$HOMESEARCH" | grep -q "$HOME" && ! echo "$HOMESEARCH" | grep -qE "^/root|^/home|^/Users|^/var/www"; then #If not listed and not in /home, /Users/, /root, or /var/www add current home folder
+  if ! echo "$HOMESEARCH" | grep -q "$HOME" && ! echo "$HOMESEARCH" | grep -qE "^/root|^/home|^/Users|^/var/www"; then 
     HOMESEARCH="$HOME $HOMESEARCH"
   fi
 fi
-GREPHOMESEARCH=$(echo "$HOMESEARCH" | sed 's/ *$//g' | tr " " "|") #Remove ending spaces before putting "|"
+GREPHOMESEARCH=$(echo "$HOMESEARCH" | sed 's/ *$//g' | tr " " "|") 
 
 basic_net_info(){
   print_title "Basic Network Info"
@@ -635,11 +631,10 @@ if [ "$PORT_FORWARD" ]; then
     printf $RED"[-] Err: Invalid port forwarding configuration: $PORT_FORWARD. The format is: LOCAL_IP:LOCAL_PORT:REMOTE_IP:REMOTE_PORT\nFor example: 10.10.14.8:7777:127.0.0.1:8000"$NC;
     exit 0
   fi
-  #Check if LOCAL_PORT is a number
   if ! [ "$(echo $LOCAL_PORT | grep -E '^[0-9]+$')" ]; then
     printf $RED"[-] Err: Invalid port forwarding configuration: $PORT_FORWARD. The format is: LOCAL_IP:LOCAL_PORT:REMOTE_IP:REMOTE_PORT\nFor example: 10.10.14.8:7777:127.0.0.1:8000"$NC;
   fi
-  #Check if REMOTE_PORT is a number
+
   if ! [ "$(echo $REMOTE_PORT | grep -E '^[0-9]+$')" ]; then
     printf $RED"[-] Err: Invalid port forwarding configuration: $PORT_FORWARD. The format is: LOCAL_IP:LOCAL_PORT:REMOTE_IP:REMOTE_PORT\nFor example: 10.10.14.8:7777:127.0.0.1:8000"$NC;
   fi
@@ -697,12 +692,11 @@ if [ "$SEARCH_IN_FOLDER" ]; then
   FIND_DIR_CUSTOM=`eval_bckgrd "find $SEARCH_IN_FOLDER -type d -name \"ipa\" -o -name \"pam.d\" -o -name \"doctl\" -o -name \".bluemix\" -o -name \"cacti\" -o -name \"kube-proxy\" -o -name \"*jenkins\" -o -name \"couchdb\" -o -name \".svn\" -o -name \"ldap\" -o -name \"system-connections\" -o -name \"varnish\" -o -name \"environments\" -o -name \"zabbix\" -o -name \"logstash\" -o -name \".irssi\" -o -name \"gcloud\" -o -name \".password-store\" -o -name \"keyrings\" -o -name \"bind\" -o -name \"Google Cloud Directory Sync\" -o -name \"concourse-keys\" -o -name \"kubelet\" -o -name \"postfix\" -o -name \".kube*\" -o -name \"legacy_credentials\" -o -name \"system.d\" -o -name \"mysql\" -o -name \"Google Password Sync\" -o -name \"roundcube\" -o -name \"neo4j\" -o -name \"filezilla\" -o -name \"ErrorRecords\" -o -name \"dirsrv\" -o -name \"sites-enabled\" -o -name \".cloudflared\" -o -name \"nginx\" -o -name \"concourse-auth\" -o -name \".vnc\" -o -name \"sentry\" -o -name \"seeddms*\" -o -name \"kubernetes\" -o -name \".docker\" 2>/dev/null | sort; printf \\\$YELLOW'. '\\\$NC 1>&2;"`
   FIND_CUSTOM=`eval_bckgrd "find $SEARCH_IN_FOLDER -name \"RDCMan.settings\" -o -name \"dockershim.sock\" -o -name \".rhosts\" -o -name \"*.pfx\" -o -name \"FreePBX.conf\" -o -name \"*.key\" -o -name \"sysprep.xml\" -o -name \"hosts.equiv\" -o -name \"authorized_keys\" -o -name \"*.sqlite3\" -o -name \"docker.socket\" -o -name \".plan\" -o -name \"id_dsa*\" -o -name \"exports\" -o -name \"unattended.xml\" -o -name \"protecteduserkey.bin\" -o -name \"pwd.ibd\" -o -name \"web*.config\" -o -name \"kcpassword\" -o -name \"default.sav\" -o -name \"error.log\" -o -name \".env*\" -o -name \"vsftpd.conf\" -o -name \".recently-used.xbel\" -o -name \"Dockerfile\" -o -name \"*.gpg\" -o -name \"backup\" -o -name \"groups.xml\" -o -name \"gitlab.rm\" -o -name \".git\" -o -name \"redis.conf\" -o -name \"*_history*\" -o -name \"passwd.ibd\" -o -name \"SAM\" -o -name \"psk.txt\" -o -name \"msal_token_cache.json\" -o -name \"grafana.ini\" -o -name \".bashrc\" -o -name \"docker-compose.yml\" -o -name \"*.viminfo\" -o -name \"id_rsa*\" -o -name \"drives.xml\" -o -name \"firebase-tools.json\" -o -name \"sentry.conf.py\" -o -name \"rocketchat.service\" -o -name \"sip.conf\" -o -name \"supervisord.conf\" -o -name \".Xauthority\" -o -name \"smb.conf\" -o -name \"atlantis.db\" -o -name \"hostapd.conf\" -o -name \"zabbix_server.conf\" -o -name \"*.sqlite\" -o -name \"*.keytab\" -o -name \"pgsql.conf\" -o -name \"glusterfs.key\" -o -name \"fastcgi_params\" -o -name \"mysqld.cnf\" -o -name \"*.ovpn\" -o -name \"*.tf\" -o -name \"crio.sock\" -o -name \".flyrc\" -o -name \".google_authenticator\" -o -name \"Elastix.conf\" -o -name \"rpcd\" -o -name \".gitconfig\" -o -name \"nginx.conf\" -o -name \"sysprep.inf\" -o -name \"plum.sqlite\" -o -name \"kibana.y*ml\" -o -name \"crontab-ui.service\" -o -name \"krb5cc_*\" -o -name \".htpasswd\" -o -name \"*.db\" -o -name \"ConsoleHost_history.txt\" -o -name \"software.sav\" -o -name \"*.der\" -o -name \"scheduledtasks.xml\" -o -name \"ssh*config\" -o -name \"bash.exe\" -o -name \"settings.php\" -o -name \"*config*.php\" -o -name \"appcmd.exe\" -o -name \"frakti.sock\" -o -name \"system.sav\" -o -name \".credentials.json\" -o -name \"sitemanager.xml\" -o -name \"docker.sock\" -o -name \"cloud.cfg\" -o -name \"*.gnupg\" -o -name \"snyk.json\" -o -name \"ipsec.secrets\" -o -name \"legacy_credentials.db\" -o -name \"autologin\" -o -name \"snmpd.conf\" -o -name \"jetty-realm.properties\" -o -name \"wcx_ftp.ini\" -o -name \"cesi.conf\" -o -name \"sess_*\" -o -name \"KeePass.ini\" -o -name \".pypirc\" -o -name \"*.pub\" -o -name \"ftp.config\" -o -name \"*.psk\" -o -name \"azureProfile.json\" -o -name \"https-xampp.conf\" -o -name \"*.pem\" -o -name \".git-credentials\" -o -name \"*.keystore\" -o -name \".sudo_as_admin_successful\" -o -name \"000-default.conf\" -o -name \"access_tokens.db\" -o -name \"credentials.db\" -o -name \"service_principal_entries.bin\" -o -name \"SYSTEM\" -o -name \"httpd.conf\" -o -name \".secrets.mkey\" -o -name \"KeePass.config*\" -o -name \"scclient.exe\" -o -name \"ws_ftp.ini\" -o -name \"anaconda-ks.cfg\" -o -name \"postgresql.conf\" -o -name \".vault-token\" -o -name \"secrets.yml\" -o -name \"*.vhdx\" -o -name \"software\" -o -name \"agent*\" -o -name \"filezilla.xml\" -o -name \".roadtools_auth\" -o -name \"ftp.ini\" -o -name \"storage.php\" -o -name \"racoon.conf\" -o -name \"*.jks\" -o -name \"airflow.cfg\" -o -name \"autologin.conf\" -o -name \"https.conf\" -o -name \"glusterfs.pem\" -o -name \"fat.config\" -o -name \"ntuser.dat\" -o -name \"passwd\" -o -name \"*vnc*.ini\" -o -name \"*.socket\" -o -name \"api_key\" -o -name \"crontab.db\" -o -name \"authorized_hosts\" -o -name \".k5login\" -o -name \"*.crt\" -o -name \"*.csr\" -o -name \"credentials.tfrc.json\" -o -name \"log4j-core*.jar\" -o -name \"*.keyring\" -o -name \".msmtprc\" -o -name \".wgetrc\" -o -name \"FreeSSHDservice.ini\" -o -name \"gitlab.yml\" -o -name \"rsyncd.secrets\" -o -name \"rsyncd.conf\" -o -name \"gvm-tools.conf\" -o -name \"*.vmdk\" -o -name \".github\" -o -name \"private-keys-v1.d/*.key\" -o -name \"autounattend.xml\" -o -name \"server.xml\" -o -name \"*knockd*\" -o -name \"*.rdg\" -o -name \"security.sav\" -o -name \"debian.cnf\" -o -name \"pgadmin4.db\" -o -name \"service_principal_entries.json\" -o -name \".ldaprc\" -o -name \".profile\" -o -name \"NetSetup.log\" -o -name \"printers.xml\" -o -name \"accessTokens.json\" -o -name \"webserver_config.py\" -o -name \"snyk.config.json\" -o -name \"mosquitto.conf\" -o -name \"influxdb.conf\" -o -name \"config.xml\" -o -name \"AppEvent.Evt\" -o -name \"master.key\" -o -name \"tomcat-users.xml\" -o -name \"*vnc*.c*nf*\" -o -name \"secrets.ldb\" -o -name \"kadm5.acl\" -o -name \"*.vhd\" -o -name \".lesshst\" -o -name \"amportal.conf\" -o -name \"AzureRMContext.json\" -o -name \"*.service\" -o -name \"*password*\" -o -name \"TokenCache.dat\" -o -name \"*.kdbx\" -o -name \"msal_token_cache.bin\" -o -name \"*.swp\" -o -name \"*.cer\" -o -name \"ipsec.conf\" -o -name \"unattend.xml\" -o -name \"KeePass.enforced*\" -o -name \"sssd.conf\" -o -name \"wp-config.php\" -o -name \"datasources.xml\" -o -name \"*credential*\" -o -name \"passbolt.php\" -o -name \"ddclient.conf\" -o -name \"credentials.xml\" -o -name \"access_tokens.json\" -o -name \"msal_http_cache.bin\" -o -name \"pgadmin*.db\" -o -name \".erlang.cookie\" -o -name \"wsl.exe\" -o -name \"access.log\" -o -name \"my.ini\" -o -name \"db.php\" -o -name \"adc.json\" -o -name \"ffftp.ini\" -o -name \"mariadb.cnf\" -o -name \"mongod*.conf\" -o -name \"glusterfs.ca\" -o -name \"*vnc*.txt\" -o -name \"rktlet.sock\" -o -name \"unattend.txt\" -o -name \"backups\" -o -name \"*.timer\" -o -name \"known_hosts\" -o -name \"creds*\" -o -name \"containerd.sock\" -o -name \"setupinfo\" -o -name \"*.ftpconfig\" -o -name \"*.p12\" -o -name \"password*.ibd\" -o -name \"*.pgp\" -o -name \"bitcoin.conf\" -o -name \"database.php\" -o -name \"my.cnf\" -o -name \"unattend.inf\" -o -name \"setupinfo.bak\" -o -name \"krb5.conf\" -o -name \"sites.ini\" -o -name \"Ntds.dit\" -o -name \"config.php\" -o -name \"hudson.util.Secret\" -o -name \"iis6.log\" -o -name \".boto\" -o -name \"vault-ssh-helper.hcl\" -o -name \"SecEvent.Evt\" -o -name \"zabbix_agentd.conf\" -o -name \"index.dat\" -o -name \"clouds.config\" -o -name \"pagefile.sys\" -o -name \"php.ini\" -o -name \"elasticsearch.y*ml\" -o -name \"winscp.ini\" -o -name \"*.tfstate\" -o -name \"pg_hba.conf\" -o -name \"*vnc*.xml\" -o -name \"recentservers.xml\" 2>/dev/null | sort; printf \\\$YELLOW'. '\\\$NC 1>&2;"`
 
-  wait # Always wait at the end
+  wait
   CONT_THREADS=0 #Reset the threads counter
 elif echo $CHECKS | grep -q procs_crons_timers_srvcs_sockets || echo $CHECKS | grep -q software_information || echo $CHECKS | grep -q interesting_files; then
   printf $GREEN"Caching directories "$NC
   CONT_THREADS=0
-  # FIND ALL KNOWN INTERESTING SOFTWARE FILES
   FIND_DIR_APPLICATIONS=`eval_bckgrd "find ${ROOT_FOLDER}applications -type d -name \"ipa\" -o -name \"doctl\" -o -name \".bluemix\" -o -name \"cacti\" -o -name \"*jenkins\" -o -name \"couchdb\" -o -name \".svn\" -o -name \"ldap\" -o -name \"varnish\" -o -name \"environments\" -o -name \"zabbix\" -o -name \"logstash\" -o -name \".irssi\" -o -name \"gcloud\" -o -name \".password-store\" -o -name \"keyrings\" -o -name \"Google Cloud Directory Sync\" -o -name \"concourse-keys\" -o -name \"postfix\" -o -name \".kube*\" -o -name \"legacy_credentials\" -o -name \"mysql\" -o -name \"Google Password Sync\" -o -name \"roundcube\" -o -name \"neo4j\" -o -name \"filezilla\" -o -name \"ErrorRecords\" -o -name \"dirsrv\" -o -name \"sites-enabled\" -o -name \".cloudflared\" -o -name \"nginx\" -o -name \"concourse-auth\" -o -name \".vnc\" -o -name \"sentry\" -o -name \"seeddms*\" -o -name \".docker\" 2>/dev/null | sort; printf \\\$YELLOW'. '\\\$NC 1>&2;"`
   FIND_DIR_BIN=`eval_bckgrd "find ${ROOT_FOLDER}bin -type d -name \"ipa\" -o -name \"doctl\" -o -name \".bluemix\" -o -name \"cacti\" -o -name \"*jenkins\" -o -name \"couchdb\" -o -name \".svn\" -o -name \"ldap\" -o -name \"varnish\" -o -name \"environments\" -o -name \"zabbix\" -o -name \"logstash\" -o -name \".irssi\" -o -name \"gcloud\" -o -name \".password-store\" -o -name \"keyrings\" -o -name \"Google Cloud Directory Sync\" -o -name \"concourse-keys\" -o -name \"postfix\" -o -name \".kube*\" -o -name \"legacy_credentials\" -o -name \"mysql\" -o -name \"Google Password Sync\" -o -name \"roundcube\" -o -name \"neo4j\" -o -name \"filezilla\" -o -name \"ErrorRecords\" -o -name \"dirsrv\" -o -name \"sites-enabled\" -o -name \".cloudflared\" -o -name \"nginx\" -o -name \"concourse-auth\" -o -name \".vnc\" -o -name \"sentry\" -o -name \"seeddms*\" -o -name \".docker\" 2>/dev/null | sort; printf \\\$YELLOW'. '\\\$NC 1>&2;"`
   FIND_DIR_CACHE=`eval_bckgrd "find ${ROOT_FOLDER}.cache -type d -name \"ipa\" -o -name \"doctl\" -o -name \".bluemix\" -o -name \"cacti\" -o -name \"*jenkins\" -o -name \"couchdb\" -o -name \".svn\" -o -name \"ldap\" -o -name \"varnish\" -o -name \"environments\" -o -name \"zabbix\" -o -name \"logstash\" -o -name \".irssi\" -o -name \"gcloud\" -o -name \".password-store\" -o -name \"keyrings\" -o -name \"Google Cloud Directory Sync\" -o -name \"concourse-keys\" -o -name \"postfix\" -o -name \".kube*\" -o -name \"legacy_credentials\" -o -name \"mysql\" -o -name \"Google Password Sync\" -o -name \"roundcube\" -o -name \"neo4j\" -o -name \"filezilla\" -o -name \"ErrorRecords\" -o -name \"dirsrv\" -o -name \"sites-enabled\" -o -name \".cloudflared\" -o -name \"nginx\" -o -name \"concourse-auth\" -o -name \".vnc\" -o -name \"sentry\" -o -name \"seeddms*\" -o -name \".docker\" 2>/dev/null | sort; printf \\\$YELLOW'. '\\\$NC 1>&2;"`
@@ -952,15 +946,10 @@ cronjobsB="centreon"
 timersG="anacron.timer|apt-daily.timer|apt-daily-upgrade.timer|dpkg-db-backup.timer|e2scrub_all.timer|exim4-base.timer|fstrim.timer|fwupd-refresh.timer|geoipupdate.timer|io.netplan.Netplan|logrotate.timer|man-db.timer|mlocate.timer|motd-news.timer|phpsessionclean.timer|plocate-updatedb.timer|snapd.refresh.timer|snapd.snap-repair.timer|systemd-tmpfiles-clean.timer|systemd-readahead-done.timer|ua-license-check.timer|ua-messaging.timer|ua-timer.timer|ureadahead-stop.timer"
 
 Groups="ImPoSSssSiBlEee"$(groups "$USER" 2>/dev/null | cut -d ":" -f 2 | tr ' ' '|')
-
-PASSTRY="2000" #Default num of passwds to try (all by default)
-
+PASSTRY="2000" 
 groupsB="\(root\)|\(shadow\)|\(admin\)|\(video\)|\(adm\)|\(wheel\)|\(auth\)|\(staff\)"
-
 groupsVB="\(sudo\)|\(docker\)|\(lxd\)|\(disk\)|\(lxc\)"
-
 MyUID=$(id -u $(whoami))
-
 if [ "$MyUID" ]; then 
     myuid=$MyUID; 
 elif [ $(id -u $(whoami) 2>/dev/null) ]; then
@@ -971,9 +960,7 @@ fi
 if [ $myuid -gt 2147483646 ]; then baduid="|$myuid"; fi
 
 idB="euid|egid$baduid"
-
-knw_grps='\(lpadmin\)|\(cdrom\)|\(plugdev\)|\(nogroup\)' #https://www.togaware.com/linux/survivor/Standard_Groups.html
-
+knw_grps='\(lpadmin\)|\(cdrom\)|\(plugdev\)|\(nogroup\)'
 sudoB="$(whoami)|ALL:ALL|ALL : ALL|ALL|env_keep|NOPASSWD|SETENV|/apache2|/cryptsetup|/mount|/restic|--password-command|--password-file|-o ProxyCommand|-o PreferredAuthentications"
 
 sudoG="NOEXEC"
@@ -1214,7 +1201,6 @@ checkCreateReleaseAgent(){
       fi
   done
 }
-
 enumerateDockerSockets() {
   dockerVersion="$(echo_not_found)"
   if ! [ "$SEARCHED_DOCKER_SOCKETS" ]; then
@@ -1253,7 +1239,6 @@ inDockerGroup() {
     DOCKER_GROUP="Yes"
   fi
 }
-
 checkProcSysBreakouts(){
   dev_mounted="No"
   if [ $(ls -l /dev | grep -E "^c" | wc -l) -gt 50 ]; then
@@ -1376,14 +1361,12 @@ check_aliyun_ecs(){
     is_aliyun_ecs="Yes"
   fi
 }
-
 check_do(){
   is_do="No"
   if [ -f "/etc/cloud/cloud.cfg.d/90-digitalocean.cfg" ]; then
     is_do="Yes"
   fi
 }
-
 check_tencent_cvm () {
   is_tencent_cvm="No"
   if grep -qi Tencent /etc/cloud/cloud.cfg 2>/dev/null; then
@@ -1470,17 +1453,13 @@ check_gcp(){
     is_gcp_function="Yes"
   fi
 }
-
 check_az_vm(){
   is_az_vm="No"
-  # 1. Check if the Azure log directory exists
   if [ -d "/var/log/azure/" ]; then
     is_az_vm="Yes"
-  # 2. Check if 'reddog.microsoft.com' is found in /etc/resolv.conf
   elif grep -q "search reddog.microsoft.com" /etc/resolv.conf 2>/dev/null; then
     is_az_vm="Yes"
   else
-    # 3. Try querying the Azure Metadata Service for more wide support (e.g. Azure Container Registry tasks need this)
     if type curl >/dev/null 2>&1; then
       meta_response=$(curl -s --max-time 2 \
         "http://169.254.169.254/metadata/identity/oauth2/token")
